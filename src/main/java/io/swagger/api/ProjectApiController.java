@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import udea.grupo3.services.ProjectService;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
@@ -55,18 +58,19 @@ public class ProjectApiController implements ProjectApi {
         return new ResponseEntity<List<Project>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Object> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Object>(objectMapper.readValue("\"{}\"", Object.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    public ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id) {
+        Project project = new ProjectService().getProjectById(id);
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1000);
+        responseHeaders.set("MiHeader", "valor x");
+
+        if(project.getName() != null) {
+            project.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(project.getIdProject()).withSelfRel());
+        } else {
+            project = null;
         }
 
-        return new ResponseEntity<Object>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(project, responseHeaders, HttpStatus.OK);
     }
 
 }

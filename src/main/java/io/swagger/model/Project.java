@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.ResourceSupport;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -14,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Validated
 
-public class Project   {
+public class Project extends ResourceSupport {
   @JsonProperty("id")
   private Integer id = null;
 
@@ -40,7 +41,7 @@ public class Project   {
   @NotNull
 
 
-  public Integer getId() {
+  public Integer getIdProject() {
     return id;
   }
 

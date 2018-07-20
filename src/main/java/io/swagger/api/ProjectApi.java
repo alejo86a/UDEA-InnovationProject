@@ -23,6 +23,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @Api(value = "project", description = "the project API")
+@RequestMapping("/project")
 public interface ProjectApi {
 
     @ApiOperation(value = "registers a project", nickname = "registerProject", notes = "Registers a new project", tags={ "admins", })
@@ -30,7 +31,7 @@ public interface ProjectApi {
         @ApiResponse(code = 201, message = "Successful registration"),
         @ApiResponse(code = 400, message = "invalid input, object invalid"),
         @ApiResponse(code = 409, message = "an existing project already exists") })
-    @RequestMapping(value = "/project/",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -41,7 +42,7 @@ public interface ProjectApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Returns all projects", response = Project.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "not projects registered") })
-    @RequestMapping(value = "/project/",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<List<Project>> searchAllProjects();
@@ -51,9 +52,9 @@ public interface ProjectApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Object.class),
         @ApiResponse(code = 400, message = "project not found") })
-    @RequestMapping(value = "/project/{id}",
+    @RequestMapping(value = "/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Object> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id);
+    ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id);
 
 }
