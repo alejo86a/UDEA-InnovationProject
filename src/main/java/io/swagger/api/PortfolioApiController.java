@@ -6,6 +6,7 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,12 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import org.springframework.hateoas.Link;
+import udea.grupo3.services.PortfolioService;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Controller
 public class PortfolioApiController implements PortfolioApi {
@@ -38,7 +45,7 @@ public class PortfolioApiController implements PortfolioApi {
 
     public ResponseEntity<Void> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
     public ResponseEntity<List<Portfolio>> searchAllPortfolios() {
@@ -55,18 +62,25 @@ public class PortfolioApiController implements PortfolioApi {
         return new ResponseEntity<List<Portfolio>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Object> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id) {
+    public ResponseEntity<Portfolio> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id) {
         String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<Object>(objectMapper.readValue("\"{}\"", Object.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        //DTO
+        Portfolio pf = PortfolioService.GET_PORTFOLIO_BY_ID(id);
+        //Headers
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1000);
+        responseHeaders.set("MiHeader", "valor x");
+
+        if(pf == null) {
+            return new ResponseEntity<Portfolio>(pf, responseHeaders, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<Object>(HttpStatus.NOT_IMPLEMENTED);
+        //HATEAOS
+        pf.add(linkTo(PortfolioApi.class).slash(pf.getId()).withSelfRel());
+
+        //Asignar referencias
+
+        return new ResponseEntity<Portfolio>(pf, responseHeaders, HttpStatus.OK);
     }
 
 }
