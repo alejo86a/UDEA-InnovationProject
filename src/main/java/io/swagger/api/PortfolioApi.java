@@ -23,6 +23,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @Api(value = "portfolio", description = "the portfolio API")
+@RequestMapping("/portfolio")
 public interface PortfolioApi {
 
     @ApiOperation(value = "registers a portfolio", nickname = "registerPortfolio", notes = "Registers a new portfolio", tags={ "admins", })
@@ -30,7 +31,7 @@ public interface PortfolioApi {
         @ApiResponse(code = 201, message = "Successful registration"),
         @ApiResponse(code = 400, message = "invalid input, object invalid"),
         @ApiResponse(code = 409, message = "an existing portfolio already exists") })
-    @RequestMapping(value = "/portfolio/",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
@@ -41,7 +42,7 @@ public interface PortfolioApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Returns all portfolios", response = Portfolio.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "not portfolios registered") })
-    @RequestMapping(value = "/portfolio/",
+    @RequestMapping(value = "/",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<List<Portfolio>> searchAllPortfolios();
@@ -51,7 +52,7 @@ public interface PortfolioApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Object.class),
         @ApiResponse(code = 400, message = "portfolio not found") })
-    @RequestMapping(value = "/portfolio/{id}",
+    @RequestMapping(value = "/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<Portfolio> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id);

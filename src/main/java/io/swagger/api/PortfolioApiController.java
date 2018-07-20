@@ -76,7 +76,7 @@ public class PortfolioApiController implements PortfolioApi {
         }
 
         //HATEAOS
-        pf.add(linkTo(PortfolioApi.class).slash(pf.getId()).withSelfRel());
+        pf.add(linkTo(PortfolioApi.class).slash(pf.getIdPortfolio()).withSelfRel());
 
         //Asignar referencias
 
