@@ -18,7 +18,7 @@ http://localhost:8080/
 Change default port value in application.properties
 
 ## Integrantes
-Diana Ciro
-Juan Camilo Arango
-Sebastian Pelaez
-Juan Camilo Gaviria
+Diana Ciro,
+Juan Camilo Arango,
+Sebastian Pelaez,
+Juan Camilo Gaviria,

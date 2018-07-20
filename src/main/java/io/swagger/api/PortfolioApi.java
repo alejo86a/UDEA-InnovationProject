@@ -54,6 +54,6 @@ public interface PortfolioApi {
     @RequestMapping(value = "/portfolio/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Object> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id);
+    ResponseEntity<Portfolio> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id);
 
 }
