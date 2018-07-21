@@ -18,6 +18,10 @@ import udea.grupo3.services.ProjectService;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -56,17 +60,24 @@ public class ProjectApiController implements ProjectApi {
     }
 
     public ResponseEntity<List<Project>> searchAllProjects() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Project>>(objectMapper.readValue("[ {  \"idPortFolio\" : 1,  \"name\" : \"ACME Corporation\",  \"description\" : \"Project about technology\",  \"id\" : 1}, {  \"idPortFolio\" : 1,  \"name\" : \"ACME Corporation\",  \"description\" : \"Project about technology\",  \"id\" : 1} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Project>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    	//DTO
+    	List<Project> projects = ProjectService.GET_PROJECTS();
+    	
+    	//Headers
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1000);
+        responseHeaders.set("MiHeader", "valor x");
+        
+        if(projects == null) {
+    		return new ResponseEntity<List<Project>>(projects, responseHeaders, HttpStatus.NOT_FOUND);
+    	}
+        
+        //HATEAOS
+        for (Project pj: projects) {
+        	pj.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(pj.getProjectId()).withSelfRel());
         }
-
-        return new ResponseEntity<List<Project>>(HttpStatus.NOT_IMPLEMENTED);
+              
+        return new ResponseEntity<List<Project>>(projects, responseHeaders, HttpStatus.OK);
     }
 
     public ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("projectId") Integer projectId) {
