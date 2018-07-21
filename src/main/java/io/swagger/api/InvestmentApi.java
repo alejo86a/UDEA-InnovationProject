@@ -38,12 +38,19 @@ public interface InvestmentApi {
     ResponseEntity<Investment> registerInvestment(@ApiParam(value = "Invest tot register"  )  @Valid @RequestBody Investment investment);
 
 
+    @ApiOperation(value = "Delete an investment", nickname = "unregisterInvestment", notes = "Delete an existent investment", tags = {"admins", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "Investment deleted"),
+            @ApiResponse(code = 400, message = "Doesn't exist the investment")})
+    @RequestMapping(value = "/{id}", produces = {"application/json"}, method = RequestMethod.DELETE)
+    ResponseEntity<Void> deleteInvestment(@ApiParam(value = "id investment to delete", required = true) @PathVariable("id") String projectId);
+
+    
     @ApiOperation(value = "searches all investments", nickname = "searchAllInvestments", notes = "Searches all investments", response = Investment.class, responseContainer = "List", tags={ "admins","investors","projectOwners", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Returns all investments", response = Investment.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "not investment registered") })
-    @RequestMapping(value = "/investment/",
-        produces = { "application/json" }, 
+    @RequestMapping( produces = { "application/json" }, 
         method = RequestMethod.GET)
     List<Investment> searchAllInvestments();
 
@@ -63,6 +70,8 @@ public interface InvestmentApi {
     @RequestMapping(value = "/{id}/projects",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    List<Project> listProjects(@ApiParam(value = "id investment to find",required=true) @PathVariable("idTorneo") Integer id);
+    List<Project> listProjects(@ApiParam(value = "id investment to find",required=true) @PathVariable("id") Integer id);
+    
+    
 
 }
