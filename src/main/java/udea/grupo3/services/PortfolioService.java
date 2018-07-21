@@ -41,4 +41,17 @@ public class PortfolioService {
         result.add(project);
         return result;
     }
+    
+    public static List<Portfolio> GET_PORTFOLIOS() {
+    	List<Portfolio> lst = new ArrayList<>();
+    	for(int i = 0; i < 5 ; i++) {
+    		Portfolio p = new Portfolio();
+    		p.setPortfolioId(i);
+    		p.setName("Portafolio #"+ (i+1));
+    		p.setDescription("Descripción del Portafolio #" + (i+1));
+    		lst.add(p);
+    	}
+
+        return  lst;
+    }
 }

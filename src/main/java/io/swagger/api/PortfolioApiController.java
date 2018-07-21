@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -65,21 +66,30 @@ public class PortfolioApiController implements PortfolioApi {
     }
 
     public ResponseEntity<List<Portfolio>> searchAllPortfolios() {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                return new ResponseEntity<List<Portfolio>>(objectMapper.readValue("[ {  \"name\" : \"Technology\",  \"description\" : \"Projects relationed with technology\",  \"id\" : 1}, {  \"name\" : \"Technology\",  \"description\" : \"Projects relationed with technology\",  \"id\" : 1} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<Portfolio>>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        
+    	//DTO
+    	List<Portfolio> portfolios = PortfolioService.GET_PORTFOLIOS();
+    	
+    	//Headers
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1000);
+        responseHeaders.set("MiHeader", "valor x");
+        
+        if(portfolios == null) {
+    		return new ResponseEntity<List<Portfolio>>(portfolios, responseHeaders, HttpStatus.NOT_FOUND);
+    	}
+        
+        //HATEAOS
+        for (Portfolio pf: portfolios) {
+        	pf.add(linkTo(PortfolioApi.class).slash(pf.getPortfolioId()).withSelfRel());
+        	List<Project> projectsList = methodOn(PortfolioApiController.class).listProjects(pf.getPortfolioId());
+            pf.add(linkTo(projectsList).withRel("allProjects"));
         }
-
-        return new ResponseEntity<List<Portfolio>>(HttpStatus.NOT_IMPLEMENTED);
+              
+        return new ResponseEntity<List<Portfolio>>(portfolios, responseHeaders, HttpStatus.OK);
     }
 
     public ResponseEntity<Portfolio> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id) {
-        String accept = request.getHeader("Accept");
         //DTO
         Portfolio pf = PortfolioService.GET_PORTFOLIO_BY_ID(id);
         //Headers
@@ -95,8 +105,6 @@ public class PortfolioApiController implements PortfolioApi {
         pf.add(linkTo(PortfolioApi.class).slash(pf.getPortfolioId()).withSelfRel());
         List<Project> projectsList = methodOn(PortfolioApiController.class).listProjects(pf.getPortfolioId());
         pf.add(linkTo(projectsList).withRel("allProjects"));
-
-        //Asignar referencias
 
         return new ResponseEntity<Portfolio>(pf, responseHeaders, HttpStatus.OK);
     }
