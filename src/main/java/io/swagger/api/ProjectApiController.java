@@ -44,6 +44,12 @@ public class ProjectApiController implements ProjectApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    public ResponseEntity<Void> unregisterProject(String projectId) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1_000L);
+        return new ResponseEntity<>(responseHeaders, HttpStatus.NO_CONTENT);
+    }
+
     public ResponseEntity<List<Project>> searchAllProjects() {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
