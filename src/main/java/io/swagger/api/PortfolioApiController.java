@@ -3,8 +3,10 @@ package io.swagger.api;
 import io.swagger.model.Portfolio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.model.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -77,10 +79,20 @@ public class PortfolioApiController implements PortfolioApi {
 
         //HATEAOS
         pf.add(linkTo(PortfolioApi.class).slash(pf.getIdPortfolio()).withSelfRel());
+        List<Project> projectsList = methodOn(PortfolioApiController.class).listProjects(pf.getIdPortfolio());
+        pf.add(linkTo(projectsList).withRel("allProjects"));
 
         //Asignar referencias
 
         return new ResponseEntity<Portfolio>(pf, responseHeaders, HttpStatus.OK);
+    }
+
+    public List<Project> listProjects(@PathVariable("id") Integer id) {
+        List<Project> result = new PortfolioService().getProjects(id);
+        for (Project project : result) {
+            project.add(linkTo(ProjectApi.class).slash(project.getIdProject()).withSelfRel());
+        }
+        return result;
     }
 
 }

@@ -7,15 +7,10 @@ package io.swagger.api;
 
 import io.swagger.model.Portfolio;
 import io.swagger.annotations.*;
+import io.swagger.model.Project;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -57,4 +52,13 @@ public interface PortfolioApi {
         method = RequestMethod.GET)
     ResponseEntity<Portfolio> searchPortfolio(@ApiParam(value = "id portfolio to find",required=true) @PathVariable("id") Integer id);
 
+    @ApiOperation(value = "search a project list given a portfolio", nickname = "listProjects", notes = "Given a valid portfolio Id, returns all its projects", response = Object.class, tags={ "admins","investors","projectOwners", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return result", response = Object.class),
+            @ApiResponse(code = 400, message = "incorrect parameter") })
+    @RequestMapping(value = "/{id}/projects",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    @ResponseBody
+    List<Project> listProjects(@ApiParam(value = "portfolio id search project",required=true) @PathVariable("id") Integer id);
 }
