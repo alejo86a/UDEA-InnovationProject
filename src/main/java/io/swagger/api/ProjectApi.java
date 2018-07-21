@@ -37,6 +37,13 @@ public interface ProjectApi {
         method = RequestMethod.POST)
     ResponseEntity<Void> registerProject(@ApiParam(value = "Project to register"  )  @Valid @RequestBody Project project);
 
+    @ApiOperation(value = "unregisters a project", nickname = "unregisterProject", notes = "Unregisters an existent project", tags = {"admins", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "Project marked for disabling"),
+            @ApiResponse(code = 204, message = "Project unregistered")})
+    @RequestMapping(value = "/{projectId}", produces = {"application/json"}, method = RequestMethod.DELETE)
+    ResponseEntity<Void> unregisterProject(@ApiParam(value = "project id to unregister", required = true) @PathVariable("projectId") String projectId);
+
 
     @ApiOperation(value = "searches all projects", nickname = "searchAllProjects", notes = "Searches all projects", response = Project.class, responseContainer = "List", tags={ "admins","investors","projectOwners", })
     @ApiResponses(value = { 
