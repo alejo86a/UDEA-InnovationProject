@@ -38,7 +38,7 @@ public class Portfolio extends ResourceSupport {
   @NotNull
 
 
-  public Integer getIdPortfolio() {
+  public Integer getPortfolioId() {
     return portfolioId;
   }
 

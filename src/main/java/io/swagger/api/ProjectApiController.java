@@ -86,7 +86,7 @@ public class ProjectApiController implements ProjectApi {
 
     public Portfolio getPortfolio(@PathVariable("projectId") Integer id) {
         Portfolio portfolio = PortfolioService.GET_PORTFOLIO_BY_ID(id);
-        portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getIdPortfolio()).withSelfRel());
+        portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getPortfolioId()).withSelfRel());
         return portfolio;
     }
 

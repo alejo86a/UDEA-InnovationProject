@@ -44,18 +44,18 @@ public class PortfolioApiController implements PortfolioApi {
     public ResponseEntity<Portfolio> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio) {
     	
     	//Verificamos el Objeto
-    	if(portfolio.getIdPortfolio() == null) portfolio.setPortfolioId(6);
+    	if(portfolio.getPortfolioId() == null) portfolio.setPortfolioId(6);
     	if(portfolio.getName() == null) portfolio.setName("Portfolio Six");
     	if(portfolio.getDescription() == null) portfolio.setDescription("This is the descripción to portofilo six");
     	
     	//Agregamos las conexiones
-    	portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getIdPortfolio()).withSelfRel());
+    	portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getPortfolioId()).withSelfRel());
     	
     	//Se prepara el Header de Respuesta
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setExpires(1_000L);
         return new ResponseEntity<>(portfolio, responseHeaders, HttpStatus.CREATED);
-        
+                
     }
 
     public ResponseEntity<Void> unregisterPortfolio(String portfolioId) {
@@ -92,8 +92,8 @@ public class PortfolioApiController implements PortfolioApi {
         }
 
         //HATEAOS
-        pf.add(linkTo(PortfolioApi.class).slash(pf.getIdPortfolio()).withSelfRel());
-        List<Project> projectsList = methodOn(PortfolioApiController.class).listProjects(pf.getIdPortfolio());
+        pf.add(linkTo(PortfolioApi.class).slash(pf.getPortfolioId()).withSelfRel());
+        List<Project> projectsList = methodOn(PortfolioApiController.class).listProjects(pf.getPortfolioId());
         pf.add(linkTo(projectsList).withRel("allProjects"));
 
         //Asignar referencias
