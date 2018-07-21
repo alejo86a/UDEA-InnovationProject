@@ -37,7 +37,7 @@ public interface PortfolioApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio);
+    ResponseEntity<Portfolio> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio);
 
 
     @ApiOperation(value = "unregisters a portfolio", nickname = "unregisterPortfolio", notes = "Unregisters an existent portfolio", tags = {"admins", })

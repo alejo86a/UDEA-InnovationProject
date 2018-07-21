@@ -16,8 +16,8 @@ import javax.validation.constraints.*;
 @Validated
 
 public class Portfolio extends ResourceSupport {
-  @JsonProperty("id")
-  private Integer id = null;
+  @JsonProperty("portfolioId")
+  private Integer portfolioId = null;
 
   @JsonProperty("name")
   private String name = null;
@@ -26,7 +26,7 @@ public class Portfolio extends ResourceSupport {
   private String description = null;
 
   public Portfolio id(Integer id) {
-    this.id = id;
+    this.portfolioId = id;
     return this;
   }
 
@@ -39,11 +39,11 @@ public class Portfolio extends ResourceSupport {
 
 
   public Integer getIdPortfolio() {
-    return id;
+    return portfolioId;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setPortfolioId(Integer portfolioId) {
+    this.portfolioId = portfolioId;
   }
 
   public Portfolio name(String name) {
@@ -98,14 +98,14 @@ public class Portfolio extends ResourceSupport {
       return false;
     }
     Portfolio portfolio = (Portfolio) o;
-    return Objects.equals(this.id, portfolio.id) &&
+    return Objects.equals(this.portfolioId, portfolio.portfolioId) &&
         Objects.equals(this.name, portfolio.name) &&
         Objects.equals(this.description, portfolio.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description);
+    return Objects.hash(portfolioId, name, description);
   }
 
   @Override
@@ -113,7 +113,7 @@ public class Portfolio extends ResourceSupport {
     StringBuilder sb = new StringBuilder();
     sb.append("class Portfolio {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    portfolioId: ").append(toIndentedString(portfolioId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");

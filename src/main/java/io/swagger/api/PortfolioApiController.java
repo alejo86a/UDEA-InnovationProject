@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.model.Investment;
 import io.swagger.model.Portfolio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -7,6 +8,7 @@ import io.swagger.model.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,9 +41,21 @@ public class PortfolioApiController implements PortfolioApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    public ResponseEntity<Portfolio> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio) {
+    	
+    	//Verificamos el Objeto
+    	if(portfolio.getIdPortfolio() == null) portfolio.setPortfolioId(6);
+    	if(portfolio.getName() == null) portfolio.setName("Portfolio Six");
+    	if(portfolio.getDescription() == null) portfolio.setDescription("This is the descripción to portofilo six");
+    	
+    	//Agregamos las conexiones
+    	portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getIdPortfolio()).withSelfRel());
+    	
+    	//Se prepara el Header de Respuesta
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1_000L);
+        return new ResponseEntity<>(portfolio, responseHeaders, HttpStatus.CREATED);
+        
     }
 
     public ResponseEntity<Void> unregisterPortfolio(String portfolioId) {

@@ -16,7 +16,7 @@ public class PortfolioService {
         Portfolio pf = null;
         if (idPortfolio == 1 || idPortfolio == 2) {
             pf = new Portfolio();
-            pf.setId(idPortfolio);
+            pf.setPortfolioId(idPortfolio);
             pf.setName("my first portfolio");
             pf.setDescription("my description");
         }
