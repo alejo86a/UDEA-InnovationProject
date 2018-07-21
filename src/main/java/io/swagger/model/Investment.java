@@ -1,23 +1,26 @@
 package io.swagger.model;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
-import org.springframework.validation.annotation.Validated;
+import java.util.Objects;
+
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.hateoas.ResourceSupport;
+import org.springframework.validation.annotation.Validated;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Investment
  */
 @Validated
 
-public class Investment   {
-  @JsonProperty("id")
-  private Integer id = null;
+public class Investment extends ResourceSupport  {
+  @JsonProperty("idInvestment")
+  private Integer idInvestment = null;
 
   @JsonProperty("idProject")
   private Integer idProject = null;
@@ -32,7 +35,7 @@ public class Investment   {
   private Integer timeToReturnInvestment = null;
 
   public Investment id(Integer id) {
-    this.id = id;
+    this.idInvestment = id;
     return this;
   }
 
@@ -44,12 +47,12 @@ public class Investment   {
   @NotNull
 
 
-  public Integer getId() {
-    return id;
+  public Integer getIdInvestment() {
+    return idInvestment;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setIdInvestment(Integer id) {
+    this.idInvestment = id;
   }
 
   public Investment idProject(Integer idProject) {
@@ -147,7 +150,7 @@ public class Investment   {
       return false;
     }
     Investment investment = (Investment) o;
-    return Objects.equals(this.id, investment.id) &&
+    return Objects.equals(this.idInvestment, investment.idInvestment) &&
         Objects.equals(this.idProject, investment.idProject) &&
         Objects.equals(this.amountInvestment, investment.amountInvestment) &&
         Objects.equals(this.porcentageToReturn, investment.porcentageToReturn) &&
@@ -156,7 +159,7 @@ public class Investment   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, idProject, amountInvestment, porcentageToReturn, timeToReturnInvestment);
+    return Objects.hash(idInvestment, idProject, amountInvestment, porcentageToReturn, timeToReturnInvestment);
   }
 
   @Override
@@ -164,7 +167,7 @@ public class Investment   {
     StringBuilder sb = new StringBuilder();
     sb.append("class Investment {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    id: ").append(toIndentedString(idInvestment)).append("\n");
     sb.append("    idProject: ").append(toIndentedString(idProject)).append("\n");
     sb.append("    amountInvestment: ").append(toIndentedString(amountInvestment)).append("\n");
     sb.append("    porcentageToReturn: ").append(toIndentedString(porcentageToReturn)).append("\n");
