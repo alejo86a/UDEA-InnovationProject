@@ -50,6 +50,12 @@ public class PortfolioApiController implements PortfolioApi {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
+    public ResponseEntity<Void> unregisterPortfolio(String portfolioId) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1_000L);
+        return new ResponseEntity<>(responseHeaders, HttpStatus.ACCEPTED);
+    }
+
     public ResponseEntity<List<Portfolio>> searchAllPortfolios() {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {

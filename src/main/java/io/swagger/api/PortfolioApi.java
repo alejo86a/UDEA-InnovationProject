@@ -33,6 +33,13 @@ public interface PortfolioApi {
     ResponseEntity<Void> registerPortfolio(@ApiParam(value = "Portfolio to register"  )  @Valid @RequestBody Portfolio portfolio);
 
 
+    @ApiOperation(value = "unregisters a portfolio", nickname = "unregisterPortfolio", notes = "Unregisters an existent portfolio", tags = {"admins", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "Portfolio marked for disabling"),
+            @ApiResponse(code = 204, message = "Portfolio unregistered")})
+    @RequestMapping(value = "/{portfolioId}", produces = {"application/json"}, method = RequestMethod.DELETE)
+    ResponseEntity<Void> unregisterPortfolio(@ApiParam(value = "portfolio id to unregister", required = true) @PathVariable("portfolioId") String portfolioId);
+
     @ApiOperation(value = "searches all portfolios", nickname = "searchAllPortfolios", notes = "Searches all portfolios", response = Portfolio.class, responseContainer = "List", tags={ "admins","investors","projectOwners", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Returns all portfolios", response = Portfolio.class, responseContainer = "List"),
