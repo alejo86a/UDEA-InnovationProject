@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import io.swagger.model.Portfolio;
 import io.swagger.model.Project;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import udea.grupo3.services.PortfolioService;
 import udea.grupo3.services.ProjectService;
 
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -39,9 +42,17 @@ public class ProjectApiController implements ProjectApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> registerProject(@ApiParam(value = "Project to register"  )  @Valid @RequestBody Project project) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Project> registerProject(@ApiParam(value = "Project to register"  )  @Valid @RequestBody Project project) {
+        if(project.getIdProject() == null) project.setId(5);
+        if(project.getName() == null) project.setName("Dummy project");
+        if(project.getDescription() == null) project.setDescription("Latest registered project");
+        if(project.getIdPortFolio() == null) project.setIdPortFolio(1);
+        project.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(project.getIdProject()).withSelfRel());
+        Portfolio portfolio = ControllerLinkBuilder.methodOn(ProjectApiController.class).getPortfolio(project.getIdPortFolio());
+        project.add(ControllerLinkBuilder.linkTo(portfolio).withRel("portfolio"));
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setExpires(1_000L);
+        return new ResponseEntity<>(project, responseHeaders, HttpStatus.CREATED);
     }
 
     public ResponseEntity<Void> unregisterProject(String projectId) {
@@ -77,6 +88,12 @@ public class ProjectApiController implements ProjectApi {
         }
 
         return new ResponseEntity<>(project, responseHeaders, HttpStatus.OK);
+    }
+
+    public Portfolio getPortfolio(@PathVariable("id") Integer id) {
+        Portfolio portfolio = PortfolioService.GET_PORTFOLIO_BY_ID(id);
+        portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getIdPortfolio()).withSelfRel());
+        return portfolio;
     }
 
 }

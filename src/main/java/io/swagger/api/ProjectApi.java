@@ -9,11 +9,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import io.swagger.model.Portfolio;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +33,7 @@ public interface ProjectApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> registerProject(@ApiParam(value = "Project to register"  )  @Valid @RequestBody Project project);
+    ResponseEntity<Project> registerProject(@ApiParam(value = "Project to register"  )  @Valid @RequestBody Project project);
 
     @ApiOperation(value = "unregisters a project", nickname = "unregisterProject", notes = "Unregisters an existent project", tags = {"admins", })
     @ApiResponses(value = {
@@ -63,5 +61,15 @@ public interface ProjectApi {
         produces = { "application/json" }, 
         method = RequestMethod.GET)
     ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id);
+
+    @ApiOperation(value = "search a portfolio given a project", nickname = "getPortfolio", notes = "Given a valid project Id, returns its portfolio", response = Object.class, tags={ "admins","investors","projectOwners", })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Return result", response = Object.class),
+            @ApiResponse(code = 400, message = "incorrect parameter") })
+    @RequestMapping(value = "/{id}/portfolio",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    @ResponseBody
+    Portfolio getPortfolio(@ApiParam(value = "project id search portfolio",required=true) @PathVariable("id") Integer id);
 
 }
