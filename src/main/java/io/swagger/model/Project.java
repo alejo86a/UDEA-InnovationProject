@@ -2,12 +2,10 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+
 import javax.validation.constraints.*;
 
 /**
@@ -16,8 +14,8 @@ import javax.validation.constraints.*;
 @Validated
 
 public class Project extends ResourceSupport {
-  @JsonProperty("id")
-  private Integer id = null;
+  @JsonProperty("projectId")
+  private Integer projectId = null;
 
   @JsonProperty("name")
   private String name = null;
@@ -29,7 +27,7 @@ public class Project extends ResourceSupport {
   private Integer idPortFolio = null;
 
   public Project id(Integer id) {
-    this.id = id;
+    this.projectId = id;
     return this;
   }
 
@@ -41,12 +39,12 @@ public class Project extends ResourceSupport {
   @NotNull
 
 
-  public Integer getIdProject() {
-    return id;
+  public Integer getProjectId() {
+    return projectId;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setProjectId(Integer id) {
+    this.projectId = id;
   }
 
   public Project name(String name) {
@@ -121,7 +119,7 @@ public class Project extends ResourceSupport {
       return false;
     }
     Project project = (Project) o;
-    return Objects.equals(this.id, project.id) &&
+    return Objects.equals(this.projectId, project.projectId) &&
         Objects.equals(this.name, project.name) &&
         Objects.equals(this.description, project.description) &&
         Objects.equals(this.idPortFolio, project.idPortFolio);
@@ -129,7 +127,7 @@ public class Project extends ResourceSupport {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description, idPortFolio);
+    return Objects.hash(projectId, name, description, idPortFolio);
   }
 
   @Override
@@ -137,7 +135,7 @@ public class Project extends ResourceSupport {
     StringBuilder sb = new StringBuilder();
     sb.append("class Project {\n");
     
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    id: ").append(toIndentedString(projectId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    idPortFolio: ").append(toIndentedString(idPortFolio)).append("\n");

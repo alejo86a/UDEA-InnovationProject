@@ -57,19 +57,19 @@ public interface ProjectApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "search results matching criteria", response = Object.class),
         @ApiResponse(code = 400, message = "project not found") })
-    @RequestMapping(value = "/{id}",
+    @RequestMapping(value = "/{projectId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id);
+    ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("projectId") Integer projectId);
 
     @ApiOperation(value = "search a portfolio given a project", nickname = "getPortfolio", notes = "Given a valid project Id, returns its portfolio", response = Object.class, tags={ "admins","investors","projectOwners", })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Return result", response = Object.class),
             @ApiResponse(code = 400, message = "incorrect parameter") })
-    @RequestMapping(value = "/{id}/portfolio",
+    @RequestMapping(value = "/{projectId}/portfolio",
             produces = { "application/json" },
             method = RequestMethod.GET)
     @ResponseBody
-    Portfolio getPortfolio(@ApiParam(value = "project id search portfolio",required=true) @PathVariable("id") Integer id);
+    Portfolio getPortfolio(@ApiParam(value = "project id search portfolio",required=true) @PathVariable("projectId") Integer projectId);
 
 }

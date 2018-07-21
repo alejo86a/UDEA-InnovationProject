@@ -68,7 +68,7 @@ public class InvestmentApiController implements InvestmentApi {
 	public @ResponseBody List<Project> listProjects(@PathVariable("id") Integer idInvestment) {
 		List<Project> projects = investmentService.getProjects(idInvestment);
 		for (Project project : projects) {
-			Link projectLink = linkTo(ProjectApi.class).slash(project.getIdProject()).withSelfRel();
+			Link projectLink = linkTo(ProjectApi.class).slash(project.getProjectId()).withSelfRel();
 			project.add(projectLink);
 		}
 		return projects;

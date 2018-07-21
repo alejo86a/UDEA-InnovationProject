@@ -13,18 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 import udea.grupo3.services.PortfolioService;
 import udea.grupo3.services.ProjectService;
 
-import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,11 +37,11 @@ public class ProjectApiController implements ProjectApi {
     }
 
     public ResponseEntity<Project> registerProject(@ApiParam(value = "Project to register"  )  @Valid @RequestBody Project project) {
-        if(project.getIdProject() == null) project.setId(5);
+        if(project.getProjectId() == null) project.setProjectId(5);
         if(project.getName() == null) project.setName("Dummy project");
         if(project.getDescription() == null) project.setDescription("Latest registered project");
         if(project.getIdPortFolio() == null) project.setIdPortFolio(1);
-        project.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(project.getIdProject()).withSelfRel());
+        project.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(project.getProjectId()).withSelfRel());
         Portfolio portfolio = ControllerLinkBuilder.methodOn(ProjectApiController.class).getPortfolio(project.getIdPortFolio());
         project.add(ControllerLinkBuilder.linkTo(portfolio).withRel("portfolio"));
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -75,14 +69,14 @@ public class ProjectApiController implements ProjectApi {
         return new ResponseEntity<List<Project>>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("id") Integer id) {
-        Project project = new ProjectService().getProjectById(id);
+    public ResponseEntity<Project> searchProject(@ApiParam(value = "id project to find",required=true) @PathVariable("projectId") Integer projectId) {
+        Project project = new ProjectService().getProjectById(projectId);
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.setExpires(1000);
         responseHeaders.set("MiHeader", "valor x");
 
         if(project.getName() != null) {
-            project.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(project.getIdProject()).withSelfRel());
+            project.add(ControllerLinkBuilder.linkTo(ProjectApi.class).slash(project.getProjectId()).withSelfRel());
         } else {
             project = null;
         }
@@ -90,7 +84,7 @@ public class ProjectApiController implements ProjectApi {
         return new ResponseEntity<>(project, responseHeaders, HttpStatus.OK);
     }
 
-    public Portfolio getPortfolio(@PathVariable("id") Integer id) {
+    public Portfolio getPortfolio(@PathVariable("projectId") Integer id) {
         Portfolio portfolio = PortfolioService.GET_PORTFOLIO_BY_ID(id);
         portfolio.add(ControllerLinkBuilder.linkTo(PortfolioApi.class).slash(portfolio.getIdPortfolio()).withSelfRel());
         return portfolio;
