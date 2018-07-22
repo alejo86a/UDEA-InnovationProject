@@ -1,0 +1,7 @@
+1. pilas con los path, hay operaciones get que exigen que al final haya un /, ejemplo http://localhost:8080/InnovationProjectsAPI/portfolio/
+no debería ser así.
+
+2. hay urls con problemas.
+Ejemplo esta: http://localhost:8080/InnovationProjectsAPI/portfolio/0/projects
+
+3. los controllers están muy bien implementados
