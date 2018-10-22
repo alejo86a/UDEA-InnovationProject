@@ -33,18 +33,18 @@ pipeline {
 			}
 		}
 		
-		//stage('Compile') {
-		//	steps{
-		//		echo "------------>Unit Tests<------------"
-		//		sh 'gradle --b ./build.gradle compileJava'
-		//	}
-		//}
+		stage('Compile') {
+			steps{
+				echo "------------>Unit Tests<------------"
+				sh 'gradle --b ./build.gradle compileJava'
+			}
+		}
 		
 		stage('Unit Tests') {
 			steps{
 				echo "------------>Unit Tests<------------"
-				//sh 'gradle test'
-				//junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
+				sh 'gradle test'
+				junit '**/build/test-results/test/*.xml' //aggregate test results - JUnit
 			}
 		}
     
