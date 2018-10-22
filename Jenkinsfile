@@ -28,8 +28,8 @@ pipeline {
 		stage('Checkout') {
 			steps{
 				echo "------------>Checkout<------------"
-				//checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitHub_yucaci24', url: 'https://github.com/yucaci24/PC_MultiProjectGradle']]])
-				//sh 'gradle clean'
+				checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitHub_jcarangoGitHub', url: 'https://github.com/jcarangoGitHub/UDEA-InnovationProject']]])
+				sh 'gradle clean'
 			}
 		}
 		
@@ -66,7 +66,7 @@ pipeline {
 		stage('Build') {
 			steps {
 				echo "------------>Build<------------"
-				//sh 'gradle build -x test'
+				sh 'gradle build -x test'
 			}
 		}
 	}
@@ -77,6 +77,7 @@ pipeline {
 		}
 		success {
 			echo 'This will run only if successful'
+			junit '**/build/test-results/test/*.xml'
 		}
 		failure {
 			echo 'This will run only if failed'
